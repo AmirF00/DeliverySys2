@@ -96,21 +96,141 @@ void Packets::displayReversePackets() {
     }
 }
 
+// Function to insert a packet at a specific position
+void Packets::insertPacketAtPosition(int position) {
+    if (position < 1 || position > packetCount + 1) {
+        std::cout << "Invalid position for insertion.\n";
+        return;
+    }
+
+    // Create a new packet
+    Node* newNode = new Node;
+
+    // Increment packet number
+    ++packetCount;
+
+    // Set packet attributes (similar to addPacket)
+
+    // Update links
+    if (position == 1) {
+        newNode->prev = nullptr;
+        newNode->next = head;
+        if (head != nullptr) {
+            head->prev = newNode;
+        } else {
+            // The list is empty, set the tail
+            tail = newNode;
+        }
+        head = newNode;
+    } else if (position == packetCount) {
+        newNode->prev = tail;
+        newNode->next = nullptr;
+        tail->next = newNode;
+        tail = newNode;
+    } else {
+        Node* current = head;
+        for (int i = 1; i < position - 1; ++i) {
+            current = current->next;
+        }
+        newNode->prev = current;
+        newNode->next = current->next;
+        current->next->prev = newNode;
+        current->next = newNode;
+    }
+}
+
+// Function to delete a packet at a specific position
+void Packets::deletePacketAtPosition(int position) {
+    if (position < 1 || position > packetCount) {
+        std::cout << "Invalid position for deletion.\n";
+        return;
+    }
+
+    Node* current = head;
+
+    if (position == 1) {
+        head = current->next;
+        if (head != nullptr) {
+            head->prev = nullptr;
+        } else {
+            // The list is empty, set the tail to nullptr
+            tail = nullptr;
+        }
+    } else if (position == packetCount) {
+        current = tail;
+        tail = current->prev;
+        tail->next = nullptr;
+    } else {
+        for (int i = 1; i < position; ++i) {
+            current = current->next;
+        }
+        current->prev->next = current->next;
+        current->next->prev = current->prev;
+    }
+
+    delete current;
+    --packetCount;
+}
+
+// Function to search for a packet by packet number
+Packets::Node* Packets::searchPacketByNumber(int packetNumber) {
+    Node* current = head;
+    while (current != nullptr) {
+        if (current->id.packetNumber == packetNumber) {
+            return current;
+        }
+        current = current->next;
+    }
+    return nullptr;
+}
+
+// Function to peek at the front packet
+Packets::Node* Packets::peekFront() {
+    return head;
+}
+
+// Function to peek at the end packet
+Packets::Node* Packets::peekEnd() {
+    return tail;
+}
+
+// Getter functions
+int Packets::getPacketCount() const {
+    return packetCount;
+}
+
+Packets::Node* Packets::getHead() const {
+    return head;
+}
+
+Packets::Node* Packets::getTail() const {
+    return tail;
+}
+
+// Setter functions
+void Packets::setHead(Node* newHead) {
+    head = newHead;
+}
+
+void Packets::setTail(Node* newTail) {
+    tail = newTail;
+}
+
+void Packets::setPacketCount(int newPacketCount) {
+    packetCount = newPacketCount;
+}
+
 // Helper function to generate a random date after 2020
 std::string Packets::generateRandomDate() {
-    const int startYear = 2021; // Change as needed
-    const int endYear = 2023;   // Change as needed
-
-    int year = startYear + std::rand() % (endYear - startYear + 1);
-    int month = 1 + std::rand() % 12;
     int day = 1 + std::rand() % 31;
+    int month = 1 + std::rand() % 12;
+    int year = 2020 + std::rand() % 3; // Random year between 2020 and 2022
 
     return std::to_string(day) + "-" + std::to_string(month) + "-" + std::to_string(year);
 }
 
 // Helper function to select a town code at random
 std::string Packets::getRandomTownCode() {
-    const std::vector<std::string> townCodes = {"ADT", "PER", "ROD", "VDT", "CDV", "MOZ", "CDB", "ALD", "SAL"};
-    int randomIndex = std::rand() % townCodes.size();
-    return townCodes[randomIndex];
+    const std::string townCodes[] = {"ADT", "PER", "ROD", "VDT", "CDV", "MOZ", "CDB", "ALD", "SAL"};
+    return townCodes[std::rand() % 9];
 }

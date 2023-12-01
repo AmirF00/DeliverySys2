@@ -21,7 +21,7 @@ struct GPSCoordinates {
 };
 
 class Packets {
-private:
+public:
     struct Node {
         PacketID id;
         GPSCoordinates longitude;
@@ -30,7 +30,7 @@ private:
         Node* prev;
         Node* next;
     };
-
+private:
     Node* head;
     Node* tail;
     int packetCount;
@@ -50,6 +50,31 @@ public:
 
     // Function to display all packets in reverse order
     void displayReversePackets();
+
+    // Function to insert a packet at a specific position
+    void insertPacketAtPosition(int position);
+
+    // Function to delete a packet at a specific position
+    void deletePacketAtPosition(int position);
+
+    // Function to search for a packet by packet number
+    Node* searchPacketByNumber(int packetNumber);
+
+    // Function to peek at the front packet
+    Node* peekFront();
+
+    // Function to peek at the end packet
+    Node* peekEnd();
+
+    // Getter functions
+    int getPacketCount() const;
+    Node* getHead() const;
+    Node* getTail() const;
+
+    // Setter functions
+    void setHead(Node* newHead);
+    void setTail(Node* newTail);
+    void setPacketCount(int newPacketCount);
 
 private:
     // Helper function to generate a random date after 2020
