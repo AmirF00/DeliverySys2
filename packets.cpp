@@ -45,7 +45,6 @@ void Packets::addPacket() {
     // Set client ID
     newNode->clientID = std::to_string(std::rand() % 10000000) + static_cast<char>('A' + std::rand() % 26);
 
-
     // Update links
     newNode->prev = tail;
     newNode->next = nullptr;
@@ -76,6 +75,24 @@ void Packets::displayPackets() {
         std::cout << "Client ID: " << current->clientID << "\n\n";
 
         current = current->next;
+    }
+}
+
+// Function to display all packets in reverse order
+void Packets::displayReversePackets() {
+    Node* current = tail;
+    while (current != nullptr) {
+        std::cout << "Packet Number: " << current->id.packetNumber << "\n";
+        std::cout << "Packet ID: " << current->id.packetNumber << "-" << current->id.randomDigits
+                  << "-" << current->id.randomLetter << "-" << current->id.classificationDate
+                  << "-" << current->id.townCodes << "\n";
+        std::cout << "Longitude: " << current->longitude.degrees << "º "
+                  << current->longitude.minutes << "' " << current->longitude.seconds << "\"\n";
+        std::cout << "Latitude: " << current->latitude.degrees << "º "
+                  << current->latitude.minutes << "' " << current->latitude.seconds << "\"\n";
+        std::cout << "Client ID: " << current->clientID << "\n\n";
+
+        current = current->prev;
     }
 }
 

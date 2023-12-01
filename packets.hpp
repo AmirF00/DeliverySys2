@@ -48,6 +48,9 @@ public:
     // Function to display all packets in the list
     void displayPackets();
 
+    // Function to display all packets in reverse order
+    void displayReversePackets();
+
 private:
     // Helper function to generate a random date after 2020
     std::string generateRandomDate();
