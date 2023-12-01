@@ -75,6 +75,7 @@ public:
     void setHead(Node* newHead);
     void setTail(Node* newTail);
     void setPacketCount(int newPacketCount);
+    void movePacketToVIPList(int packetNumber, Packets& packetVIP);
 
 private:
     // Helper function to generate a random date after 2020

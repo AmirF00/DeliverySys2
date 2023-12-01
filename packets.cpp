@@ -234,3 +234,58 @@ std::string Packets::getRandomTownCode() {
     const std::string townCodes[] = {"ADT", "PER", "ROD", "VDT", "CDV", "MOZ", "CDB", "ALD", "SAL"};
     return townCodes[std::rand() % 9];
 }
+
+void Packets::movePacketToVIPList(int packetNumber, Packets& packetVIP) {
+    Node* current = head;
+
+    // Search for the packet in the original list
+    while (current != nullptr) {
+        if (current->id.packetNumber == packetNumber) {
+            // Create a new packet in the VIP list
+            packetVIP.addPacket();
+            Packets::Node* newVIPPacket = packetVIP.peekEnd();
+
+            // Copy data from the original packet to the VIP packet
+            newVIPPacket->id = current->id;
+            newVIPPacket->longitude = current->longitude;
+            newVIPPacket->latitude = current->latitude;
+            newVIPPacket->clientID = current->clientID;
+
+            // Delete the packet from the original list
+            if (current->prev != nullptr) {
+                current->prev->next = current->next;
+            } else {
+                // The packet is at the head
+                head = current->next;
+                if (head != nullptr) {
+                    head->prev = nullptr;
+                } else {
+                    // The list is empty, set the tail to nullptr
+                    tail = nullptr;
+                }
+            }
+
+            if (current->next != nullptr) {
+                current->next->prev = current->prev;
+            } else {
+                // The packet is at the tail
+                tail = current->prev;
+                if (tail != nullptr) {
+                    tail->next = nullptr;
+                } else {
+                    // The list is empty, set the head to nullptr
+                    head = nullptr;
+                }
+            }
+
+            // Delete the current node
+            delete current;
+            --packetCount;
+
+            // Exit the loop once the packet is found and processed
+            break;
+        }
+
+        current = current->next;
+    }
+}
